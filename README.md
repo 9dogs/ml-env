@@ -3,7 +3,8 @@ Environment for Machine Learning experiments
 
 ## Build
 To build image, execute: `docker build -t <tag> .` (where `<tag>` can be anything, 
-e.g. `ml:latest`)
+e.g. `ml:latest`). \
+To manage additional packages edit `packages.txt` file then rebuild the image.
 
 ## Run
 To start either jupyter notebook, jupyter lab or shell, run `run_docker_jupyter.py` helper:\
