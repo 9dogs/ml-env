@@ -1,0 +1,13 @@
+tsfresh
+kaggle
+textstat
+scikit-plot
+razdel
+swifter
+dill
+hyperopt
+scikit-multilearn
+mlxtend
+iterative-stratification
+bqplot
+holoviews

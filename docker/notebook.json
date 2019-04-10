@@ -1,0 +1,14 @@
+{
+  "load_extensions": {
+    "nbextensions_configurator/config_menu/main": true,
+	"collapsible_headings/main": true,
+    "hide_header/main": true,
+    "toc2/main": true,
+	"notify/notify": true,
+    "execute_time/ExecuteTime": true
+  },
+  "Notebook": {
+    "Header": false,
+	"Toolbar": false
+  }
+}
