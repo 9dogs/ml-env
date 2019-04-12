@@ -2,7 +2,7 @@ FROM continuumio/miniconda3
 
 # System packages
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    apt-utils \
+    build-essential \
     vim \
     curl \
     unzip \
@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 # && rm -rf /var/lib/apt/lists/*    
 
 # Main Python packages
-RUN conda install \
+RUN conda install -y \
     # Math base
 	numpy \
     scipy \
@@ -60,8 +60,9 @@ RUN conda install \
     nodejs
 
 # Packages from different conda repos
-RUN conda install -c conda-forge \
-    scikit-surprise
+RUN conda install -y -c conda-forge \
+    scikit-surprise \
+    vaex
 # PyTorch [CPU]
 RUN conda install -c pytorch \
     pytorch-cpu \
@@ -127,7 +128,7 @@ RUN jupyter notebook --allow-root --generate-config -y && \
 # RUN pip install --upgrade pystan cython
 # RUN pip install --upgrade fbprophet
 
-# Additional Python modules
+# Additional Python packages
 COPY packages.txt /packages.txt
 RUN pip install -r /packages.txt
 
