@@ -83,7 +83,8 @@ RUN jupyter notebook --allow-root --generate-config -y && \
     jupyter contrib nbextension install --system && \
     jupyter nbextensions_configurator enable --system && \
 	jupyter nbextension enable --py widgetsnbextension && \
-	jupyter labextension install @jupyter-widgets/jupyterlab-manager
+	jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
+    jupyter labextension install @jupyterlab/toc
 
 # JDK
 # RUN apt-get -y install openjdk-8-jdk
