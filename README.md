@@ -1,10 +1,9 @@
 # ml-env
-Environment for Machine Learning experiments
+Environment for Machine Learning experiments.
 
 ## Build
-To build image, execute: `docker build -t <tag> .` (where `<tag>` can be anything, 
-e.g. `ml:latest`). \
-To manage additional packages edit `packages.txt` file then rebuild the image.
+To build an image, execute: `docker build -t <tag> .` (where `<tag>` can be anything, e.g. `ml:latest`). \
+To manage additional packages modify `packages.txt` file and rebuild the image.
 
 ## Run
 To start either jupyter notebook, jupyter lab or shell, run `run_docker_jupyter.py` helper:\
@@ -26,4 +25,4 @@ optional arguments:
   --net_host            Whether to use --net=host with docker run (for Linux
                         servers)
 ```
-Then go to http://localhost:4545
+Jupyterlab and Jupyter notebook can be accessed on http://localhost:4545.
