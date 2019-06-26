@@ -21,39 +21,39 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 #     libboost-test-dev \
 #     automake \
 #     cmake \
-# && rm -rf /var/lib/apt/lists/*    
+# && rm -rf /var/lib/apt/lists/*
 
 # Main Python packages
 RUN conda install -y \
     # Math base
-	numpy \
+    numpy \
     scipy \
     pandas \
     dask \
-	# Notebooks
+    # Notebooks
     jupyter \
-	jupyterlab \
-	ipywidgets \
-	# Visialization
-	matplotlib \
-	seaborn \
+    jupyterlab \
+    ipywidgets \
+    # Visialization
+    matplotlib \
+    seaborn \
     plotly \
-	pydot \
+    pydot \
     pydotplus \
     graphviz \
     bokeh \
-	# Machine Learning
-	scikit-learn \
-	tensorflow \
-	keras \
-	lightgbm \
-	# Statistics
+    # Machine Learning
+    scikit-learn \
+    tensorflow \
+    keras \
+    lightgbm \
+    # Statistics
     statsmodels \
     # Text
     gensim \
     nltk \
     # Utils
-	tqdm \
+    tqdm \
     joblib \
     pillow \
     pytest \
@@ -74,7 +74,7 @@ RUN pip install --upgrade \
     watermark \
     geopy \
     jupyter-contrib-nbextensions \
-    jupyter-nbextensions-configurator  
+    jupyter-nbextensions-configurator
 
 # Jupyter configs
 RUN jupyter notebook --allow-root --generate-config -y && \
@@ -82,8 +82,8 @@ RUN jupyter notebook --allow-root --generate-config -y && \
     echo "c.NotebookApp.token = ''" >> ~/.jupyter/jupyter_notebook_config.py && \
     jupyter contrib nbextension install --system && \
     jupyter nbextensions_configurator enable --system && \
-	jupyter nbextension enable --py widgetsnbextension && \
-	jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
+    jupyter nbextension enable --py widgetsnbextension && \
+    jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
     jupyter labextension install @jupyterlab/toc
 
 # JDK
@@ -105,7 +105,7 @@ RUN jupyter notebook --allow-root --generate-config -y && \
 # XGBoost
 # RUN git clone --recursive https://github.com/dmlc/xgboost && \
 #    cd xgboost && \
-#    make -j4 
+#    make -j4
 # XGBoost Python wrapper
 # RUN cd xgboost/python-package && \
 #    python3 setup.py install
@@ -116,10 +116,10 @@ RUN jupyter notebook --allow-root --generate-config -y && \
 #    mkdir build && \
 #    cd build && \
 #    cmake .. && \
-#    make -j $(nproc) 
+#    make -j $(nproc)
 # LightGBM Python wrapper
 # RUN cd LightGBM/python-package && \
-#    python3 setup.py install 
+#    python3 setup.py install
 
 # Clean builds
 # WORKDIR /
