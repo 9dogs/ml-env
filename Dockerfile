@@ -1,15 +1,46 @@
 FROM continuumio/miniconda3
 
-# System packages
-RUN apt-get update && apt-get install --no-install-recommends -y \
-    build-essential \
-    vim \
-    curl \
-    unzip \
-    git \
-&& rm -rf /var/lib/apt/lists/*
+# Avoid warnings by switching to noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Build dependencies
+# Install system packages
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+        apt-utils \
+        dialog \
+        build-essential \
+        vim \
+        curl \
+        unzip \
+        git \
+    # Clean up
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
+
+# Switch back to dialog for any ad-hoc use of apt-get
+ENV DEBIAN_FRONTEND=
+
+# Add conda channels
+RUN /opt/conda/bin/conda config --prepend channels conda-forge \
+    && /opt/conda/bin/conda config --prepend channels pytorch
+
+# Install packages to <base> conda environment
+COPY environment.yml /tmp/conda-tmp/
+RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml \
+    && rm -rf /tmp/conda-tmp
+
+# Configure Jupyter
+RUN jupyter notebook --allow-root --generate-config -y \
+    && echo "c.NotebookApp.password = ''" >> ~/.jupyter/jupyter_notebook_config.py \
+    && echo "c.NotebookApp.token = ''" >> ~/.jupyter/jupyter_notebook_config.py \
+    && jupyter contrib nbextension install --system \
+    && jupyter nbextensions_configurator enable --system \
+    && jupyter nbextension enable --py widgetsnbextension \
+    && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
+    && jupyter labextension install @jupyterlab/toc
+
+# Install build dependencies for Vowpal Wabbit
 # RUN apt-get --no-install-recommends -y install \
 #     build-essential \
 #     zlib1g-dev \
@@ -23,75 +54,12 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 #     cmake \
 # && rm -rf /var/lib/apt/lists/*
 
-# Main Python packages
-RUN conda install -y \
-    # Math base
-    numpy \
-    scipy \
-    pandas \
-    dask \
-    # Notebooks
-    jupyter \
-    jupyterlab \
-    ipywidgets \
-    # Visialization
-    matplotlib \
-    seaborn \
-    plotly \
-    pydot \
-    pydotplus \
-    graphviz \
-    bokeh \
-    # Machine Learning
-    scikit-learn \
-    tensorflow \
-    keras \
-    lightgbm \
-    # Statistics
-    statsmodels \
-    # Text
-    gensim \
-    nltk \
-    # Utils
-    tqdm \
-    joblib \
-    pillow \
-    pytest \
-    nodejs
-
-# Packages from different conda repos
-RUN conda install -y -c conda-forge \
-    scikit-surprise \
-    vaex
-# PyTorch [CPU]
-RUN conda install -c pytorch \
-    pytorch-cpu \
-    torchvision-cpu
-
-# Packages absent in conda
-RUN pip install --upgrade \
-    catboost \
-    watermark \
-    geopy \
-    jupyter-contrib-nbextensions \
-    jupyter-nbextensions-configurator
-
-# Jupyter configs
-RUN jupyter notebook --allow-root --generate-config -y && \
-    echo "c.NotebookApp.password = ''" >> ~/.jupyter/jupyter_notebook_config.py && \
-    echo "c.NotebookApp.token = ''" >> ~/.jupyter/jupyter_notebook_config.py && \
-    jupyter contrib nbextension install --system && \
-    jupyter nbextensions_configurator enable --system && \
-    jupyter nbextension enable --py widgetsnbextension && \
-    jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
-    jupyter labextension install @jupyterlab/toc
-
-# JDK
+# Install JDK (for Vowpal Wabbit)
 # RUN apt-get -y install openjdk-8-jdk
 # ENV CPLUS_INCLUDE_PATH=/usr/lib/jvm/java-8-openjdk-amd64/include/linux:/usr/lib/jvm/java-1.8.0-openjdk-amd64/include
 
 # WORKDIR /build
-# Vowpal Wabbit
+# Build Vowpal Wabbit
 # RUN git clone https://github.com/JohnLangford/vowpal_wabbit.git && \
 #    cd vowpal_wabbit && \
 #    cmake . && \
@@ -102,7 +70,7 @@ RUN jupyter notebook --allow-root --generate-config -y && \
 #    cd vowpal_wabbit/python && \
 #    python3 setup.py install
 
-# XGBoost
+# Build the latest XGBoost
 # RUN git clone --recursive https://github.com/dmlc/xgboost && \
 #    cd xgboost && \
 #    make -j4
@@ -110,7 +78,7 @@ RUN jupyter notebook --allow-root --generate-config -y && \
 # RUN cd xgboost/python-package && \
 #    python3 setup.py install
 
-# LightGBM
+# Build the latest LightGBM
 # RUN git clone --recursive --depth 1 https://github.com/Microsoft/LightGBM && \
 #    cd LightGBM && \
 #    mkdir build && \
@@ -125,14 +93,11 @@ RUN jupyter notebook --allow-root --generate-config -y && \
 # WORKDIR /
 # RUN rm -rf /build
 
-# Facebook Prophet
+# Install Facebook Prophet
 # RUN pip install --upgrade pystan cython
 # RUN pip install --upgrade fbprophet
 
-# Additional Python packages
-COPY packages.txt /packages.txt
-RUN pip install -r /packages.txt
-
+# Copy notebook configuration and entry-point files
 COPY docker/notebook.json /root/.jupyter/nbconfig/notebook.json
 COPY docker/entry-point.sh /entry-point.sh
 RUN mkdir -p /home/user && \

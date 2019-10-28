@@ -1,0 +1,68 @@
+name: base
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - conda
+  - pip
+  - python=3.7.4
+  # Math base
+  - dask
+  - networkx
+  - numpy
+  - pandas
+  - scipy
+  # Notebooks
+  - ipywidgets
+  - jupyter
+  - jupyterlab
+  # Visialization
+  - altair
+  - bokeh
+  - dash
+  - dash-daq
+  - graphviz
+  - matplotlib
+  - plotly
+  - pydot
+  - pydotplus
+  - seaborn
+  - vega_datasets
+  # Machine learning
+  - lightgbm
+  - pytorch
+  - scikit-learn
+  - scikit-surprise
+  - tensorflow>=2
+  - torchvision
+  # Text
+  - gensim
+  - nltk
+  # Statistics
+  - statsmodels
+  # Tools
+  - joblib
+  - lxml
+  - nodejs
+  - pillow
+  - pytest
+  - tqdm
+  - pip:
+    - catboost
+    - dill
+    - geopy
+    - fasttext
+    - holoviews
+    - hyperopt
+    - iterative-stratification
+    - jupyter-contrib-nbextensions
+    - jupyter-nbextensions-configurator
+    - kaggle
+    - mlxtend
+    - razdel
+    - scikit-multilearn
+    - scikit-plot
+    - textstat
+    - watermark
+prefix: /opt/conda
