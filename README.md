@@ -5,14 +5,14 @@
 
 Environment for Machine Learning experiments.
 
-## Build
-To build an image, run: `docker build -t <tag> .` (where `<tag>` can be anything, e.g. `ml:latest`). \
-To add packages modify `environment.yml` file then rebuild the image.
-
 ## Run
-To start either jupyter notebook, jupyter lab or shell, run `run_docker_jupyter.py` helper:\
-`python run_docker_jupyter.py -t <tag> lab` (or `notebook`, `shell`).
+To run JupyterLab:
+- Windows: `docker run --rm -it -p 4545:4545 -v %cd%:/notebooks -w /notebooks 9dogs/ml-env lab`
+- Linux: `docker run --rm -it -p 4545:4545 -v $PWD:/notebooks -w /notebooks 9dogs/ml-env lab`
 
+JupyterLab and Jupyter Notebook can be accessed on http://localhost:4545.
+
+Or use `run_docker_jupyter.py` helper:
 ```
 usage: run_docker_jupyter.py [-h] [--docker_tag DOCKER_TAG] command
 
@@ -26,4 +26,7 @@ optional arguments:
   --docker_tag DOCKER_TAG, -t DOCKER_TAG
                         Docker image tag
 ```
-Jupyterlab and Jupyter Notebook can be accessed on http://localhost:4545.
+
+## Build
+To build an image, run: `docker build -t <tag> .` (where `<tag>` can be anything, e.g. `ml:latest`). \
+To add packages modify `environment.yml` file then rebuild the image.
