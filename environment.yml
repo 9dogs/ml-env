@@ -5,8 +5,9 @@ channels:
   - defaults
 dependencies:
   - conda
+  - cython
   - pip
-  - python=3.7.4
+  - python=3.7.5
   # Math base
   - dask
   - networkx
@@ -29,25 +30,35 @@ dependencies:
   - pydotplus
   - seaborn
   - vega_datasets
+  - tensorboard
+  - tensorboardx
   # Machine learning
   - lightgbm
   - pytorch
   - scikit-learn
   - scikit-surprise
   - tensorflow>=2
-  - torchvision
-  # Text
+  # Text tools
   - gensim
   - nltk
+  # Image tools
+  - pillow
+  - imageio
+  - opencv
+  - scikit-image
+  - torchvision
   # Statistics
   - statsmodels
   # Tools
+  - grpcio
   - joblib
   - lxml
   - nodejs
-  - pillow
   - pytest
   - tqdm
+  - crc32c
+  - GitPython
+  - packaging
   - pip:
     - catboost
     - dill
@@ -65,4 +76,5 @@ dependencies:
     - scikit-plot
     - textstat
     - watermark
+    - catalyst
 prefix: /opt/conda
