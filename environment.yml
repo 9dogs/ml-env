@@ -7,7 +7,7 @@ dependencies:
   - conda
   - cython
   - pip
-  - python=3.7.5
+  - python=3.7.6
   # Math base
   - dask
   - networkx
@@ -71,10 +71,11 @@ dependencies:
     - jupyter-nbextensions-configurator
     - kaggle
     - mlxtend
-    - razdel
     - scikit-multilearn
     - scikit-plot
     - textstat
     - watermark
     - catalyst
+    - pytorch-ignite
+    - onnxruntime
 prefix: /opt/conda

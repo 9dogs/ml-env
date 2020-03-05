@@ -1,25 +1,37 @@
-FROM continuumio/miniconda3
+FROM nvidia/cuda:10.2-base
 
-# Avoid warnings by switching to noninteractive
-ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ENV PATH /opt/conda/bin:$PATH
 
 # Install system packages
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
         apt-utils \
+        ca-certificates \
         dialog \
         build-essential \
         vim \
         curl \
+        wget \
         unzip \
         git \
+        gnupg2 \
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-# Switch back to dialog for any ad-hoc use of apt-get
-ENV DEBIAN_FRONTEND=
+# Install miniconda3
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p /opt/conda && \
+    rm ~/miniconda.sh && \
+    /opt/conda/bin/conda clean -tipsy && \
+    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    echo "conda activate base" >> ~/.bashrc && \
+    find /opt/conda/ -follow -type f -name '*.a' -delete && \
+    find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
+    /opt/conda/bin/conda clean -afy
 
 # Add conda channels
 RUN /opt/conda/bin/conda config --prepend channels conda-forge \
@@ -27,8 +39,7 @@ RUN /opt/conda/bin/conda config --prepend channels conda-forge \
 
 # Install packages to <base> conda environment
 COPY environment.yml /tmp/conda-tmp/
-RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml \
-    && rm -rf /tmp/conda-tmp
+RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml
 
 # Configure Jupyter
 RUN jupyter notebook --allow-root --generate-config -y \
@@ -39,6 +50,11 @@ RUN jupyter notebook --allow-root --generate-config -y \
     && jupyter nbextension enable --py widgetsnbextension \
     && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
     && jupyter labextension install @jupyterlab/toc
+
+# Install additional packages
+COPY additional_packages.txt /tmp/conda-tmp/
+RUN pip install -r /tmp/conda-tmp/additional_packages.txt \
+    && rm -rf /tmp/conda-tmp
 
 # Install build dependencies for Vowpal Wabbit
 # RUN apt-get --no-install-recommends -y install \
@@ -104,7 +120,7 @@ RUN mkdir -p /home/user && \
     chmod a+x /entry-point.sh
 
 WORKDIR /home/user
-EXPOSE 4545
+EXPOSE 8000
 
 ENTRYPOINT ["/entry-point.sh"]
 CMD ["shell"]
