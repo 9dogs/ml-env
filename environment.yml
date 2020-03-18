@@ -75,7 +75,8 @@ dependencies:
     - scikit-plot
     - textstat
     - watermark
+    - onnxruntime
     - catalyst
     - pytorch-ignite
-    - onnxruntime
+    - pytorch-lightning
 prefix: /opt/conda
