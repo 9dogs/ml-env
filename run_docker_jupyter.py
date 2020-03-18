@@ -25,10 +25,17 @@ def main():
     parser.add_argument(
         "--docker_tag", "-t", default="9dogs/ml:latest", help="Docker image tag"
     )
+    parser.add_argument(
+        "--gpus", default=None, help="GPUs to forward to the container (all | 1 | 2 etc.)"
+    )
     args = parser.parse_args()
     path = get_current_path()
+    if args.gpus:
+        gpus = f"--gpus {args.gpus}"
+    else:
+        gpus = ""
     run_command = (
-        f"docker run -it --rm -p 4545:4545 "
+        f"docker run -it --rm -p 4545:4545 {gpus} "
         f"-v {path}:/notebooks -w /notebooks {args.docker_tag} "
         f"{args.command}"
     )

@@ -35,6 +35,7 @@ dependencies:
   # Machine learning
   - lightgbm
   - pytorch
+  - cudatoolkit=10.1
   - scikit-learn
   - scikit-surprise
   - tensorflow>=2
