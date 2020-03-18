@@ -42,7 +42,9 @@ RUN /opt/conda/bin/conda config --prepend channels conda-forge \
 
 # Install packages to <base> conda environment
 COPY environment.yml /tmp/conda-tmp/
-RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml
+RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml \
+    && /opt/conda/bin/conda clean -afy \
+    && rm -rf /tmp/conda-tmp
 
 # Configure Jupyter
 RUN jupyter notebook --allow-root --generate-config -y \
