@@ -1,5 +1,8 @@
 FROM nvidia/cuda:10.2-base
 
+LABEL maintainer="mikhail.knyazev@phystech.edu"
+LABEL description="Docker image to bootstrap machine learning-ready environment (GPU version)"
+
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH /opt/conda/bin:$PATH
 
