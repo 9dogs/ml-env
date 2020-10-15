@@ -3,14 +3,14 @@
 [![Docker build](https://img.shields.io/docker/cloud/automated/9dogs/ml-env)](https://hub.docker.com/r/9dogs/ml-env) 
 [![License: MIT](https://img.shields.io/github/license/9dogs/ml-env)](https://choosealicense.com/licenses/mit/)
 
-CUDA and conda-based environment for machine learning experiments. 
+Conda-based environment for machine learning experiments. 
 
 Image has 2 flavors: CPU (~1.7 Gb) and GPU (~2.6 Gb).
 Pull `9dogs/ml-env:latest` for GPU-enabled version and `9dogs/ml-env:cpu` for CPU-only version.\
 For GPU image to work properly [NVIDIA driver](https://github.com/NVIDIA/nvidia-docker#quickstart) and Docker > 19.03 
 must be installed (and you have to have Linux host).
 
-Feel free to adjast `environment.yml` and `additional_packages.txt` to your needs.
+Feel free to adjust `environment.yml` and `additional_packages.txt` to fit your needs.
 
 ## Run
 To run JupyterLab:
